@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const gravatar = require("gravatar");
+const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
 
 const User = require("../../models/User");
@@ -22,14 +24,38 @@ async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    // See if user exists
     let user = await User.findOne({ email });
 
     if(user) {
       // For consistency, we mirrored the error sending behavior of express-validator above (i.e. assign an errors array to the errors object)
-      res.status(400).json({ errors: [{ msg: "User already exists" }] }); 
+      return res.status(400).json({ errors: [{ msg: "User already exists" }] }); 
     }
 
-    res.send("User route");
+    // Get user's gravatar
+    const avatar = gravatar.url(email, {
+      s: "200", // size
+      r: "pg", // rating (e.g. pg)
+      d: "mm" // default avatar (if user doesn't have a gravatar)
+    });
+
+    user = new User({
+      name,
+      email,
+      avatar,
+      password
+    });
+
+    // Encrypt password
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(password, salt);
+
+    await user.save();
+
+    // Return jsonwebtoken
+    
+    res.send("User registered");
   } catch(err) {
     console.error(err.message);
     res.status(500).send("Server error");
