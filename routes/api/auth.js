@@ -13,7 +13,7 @@ const User = require("../../models/User");
 // @access  Public
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password"); // `.select()` part is to deselect the password, which we don't want to get
+    const user = await User.findById(req.user.id).select("-password"); // `.select()` is to deselect the password, which we don't want to get
     res.json(user);
   } catch(err) {
     console.error(err.message);

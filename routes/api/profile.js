@@ -85,7 +85,7 @@ async (req, res) => {
       profile = await Profile.findOneAndUpdate(
         { user: req.user.id },
         { $set: profileFields },
-        { new: true, useFindAndModify: false }
+        { new: true }
       );
 
       return res.json(profile);
@@ -101,6 +101,38 @@ async (req, res) => {
     res.status(500).send("Server Error");
   }
 
+});
+
+// @route   GET api/profile
+// @desc    Get all profiles
+// @access  Public
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]); // We populate this query so that in the UI, we can have a list of the profiles with avatars and names
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route   GET api/profile/user/:user_id
+// @desc    Get profile by user ID (not profile ID)
+// @access  Public
+router.get("/user/:user_id", async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.params.user_id }).populate("user", ["name", "avatar"]); // Why not `req.user` here? Because `req.user` comes from auth, while this here is a public route
+    
+    if(!profile) return res.status(400).json({ msg: "Profile not found" });
+    res.json(profile);
+
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind == "ObjectId") {
+      return res.status(400).json({ msg: "Profile not found" }); // Because in these cases we don't want just the 'Server Error' message
+    }
+    res.status(500).send("Server Error");
+  }
 });
 
 module.exports = router;
