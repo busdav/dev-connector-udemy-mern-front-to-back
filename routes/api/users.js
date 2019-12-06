@@ -20,10 +20,10 @@ router.post("/", [
 async (req, res) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ errors: errors.array() }); // const `errors` is an object. We set the `errors` property of the json response to that object, which also has the `.array()` method so that we get an array of errors.
   }
 
-  const { name, email, password } = req.body;
+  const { name, email, password } = req.body; // We're pulling name, email, password consts out of the req.body (destructuring)
 
   try {
     // See if user exists
