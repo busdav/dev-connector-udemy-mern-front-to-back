@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("config");
-const db = config.get("mongoURI");
+const db = config.get("mongoURI"); // Bad practice to use config for API keys, secrets etc. Done here for simplicity. 
 
 const connectDB = async () => {
   try {
