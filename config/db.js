@@ -4,7 +4,7 @@ const db = config.get("mongoURI"); // Bad practice to use config for API keys, s
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(db, {
+    await mongoose.connect('mongodb://localhost/testing', { // switch back to `db`
       useNewUrlParser: true, 
       useUnifiedTopology: true,
       useCreateIndex: true,
