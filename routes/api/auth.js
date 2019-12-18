@@ -1,23 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const auth = require("../../middleware/auth");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const { check, validationResult } = require("express-validator");
+const bcrypt = require('bcryptjs');
+const auth = require('../../middleware/auth');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const { check, validationResult } = require('express-validator');
 
-const User = require("../../models/User");
+const User = require('../../models/User');
 
 // @route   GET api/auth
 // @desc    Test route
 // @access  Public
-router.get("/", auth, async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password"); // `.select()` is to deselect the password, which we don't want to get
+    const user = await User.findById(req.user.id).select('-password'); // `.select()` is to deselect the password, which we don't want to get
     res.json(user);
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
@@ -25,56 +25,60 @@ router.get("/", auth, async (req, res) => {
 // @desc    Authenticate user and get token
 // @access  Public
 // See express-validator documentation for validation-related elements below
-router.post("/", [
-  check("email", "Please include a valid email").isEmail(),
-  check("password", "Password is required").exists()
-], 
-async (req, res) => {
-  const errors = validationResult(req)
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { email, password } = req.body;
-
-  try {
-    // See if user exists
-    let user = await User.findOne({ email });
-
-    if(!user) {
-      // For consistency, we mirrored the error sending behavior of express-validator above (i.e. assign an errors array to the errors object)
-      return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] }); 
+router.post(
+  '/',
+  [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const { email, password } = req.body;
 
-    if(!isMatch) {
-      return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
-    }
+    try {
+      // See if user exists
+      let user = await User.findOne({ email });
 
-
-
-    // Return jsonwebtoken
-    const payload = {
-      user: {
-        id: user.id
+      if (!user) {
+        // For consistency, we mirrored the error sending behavior of express-validator above (i.e. assign an errors array to the errors object)
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
-    }
 
-    jwt.sign(
-      payload, 
-      config.get("jwtSecret"),
-      { expiresIn: 360000 }, // Optional. Make it an hour (3600) in production
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
-    );
-    
-  } catch(err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+
+      // Return jsonwebtoken
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: 360000 }, // Optional. Make it an hour (3600) in production
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
   }
-});
+);
 
 module.exports = router;

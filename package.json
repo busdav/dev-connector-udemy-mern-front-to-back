@@ -7,7 +7,9 @@
     "start": "node server",
     "server": "nodemon server",
     "client": "npm start --prefix client",
-    "dev": "concurrently 'npm run server' 'npm run client'"
+    "dev": "concurrently 'npm run server' 'npm run client'",
+    "format": "prettier '**/*.+(js|json|html|css|md)' --check",
+    "format:fix": "prettier '**/*.+(js|json|html|css|md)' --write"
   },
   "author": "David Buser",
   "license": "MIT",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.0.0",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "prettier": "1.19.1"
   }
 }
