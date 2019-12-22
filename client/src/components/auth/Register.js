@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,12 +15,12 @@ export const Register = () => {
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value }); // ... spread operator basically copies all properties of formData state object, and then we change the respective 'name' property (applicable to dfferent properties since abstracted as [e.target.name])
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
       console.log('passwords do not match');
     } else {
-      console.log(formData); // Great thing about react hooks is that it is accessible from anywhere without having to pass it in
+      console.log('Success');
     }
   };
 
@@ -38,8 +39,8 @@ export const Register = () => {
             value={name}
             onChange={e => onChange(e)}
             required
-          />{' '}
-          {/* could also call setState directly */}
+          />
+          {/* could also call setState directly, but we want to reuse for different situations */}
         </div>
         <div className="form-group">
           <input
@@ -78,7 +79,7 @@ export const Register = () => {
         <input type="submit" className="btn btn-primary" value="Register" />
       </form>
       <p className="my-1">
-        Already have an account? <a href="login.html">Sign In</a>
+        Already have an account? <Link to="/login">Sign In</Link>
       </p>
     </Fragment>
   );
