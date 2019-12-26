@@ -40,7 +40,7 @@ export const Register = () => {
             onChange={e => onChange(e)}
             required
           />
-          {/* could also call setState directly, but we want to reuse for different situations */}
+          {/* could also call setState directly, but we want to reuse for different situations. Btw for jsx comments we need the curly brace. */}
         </div>
         <div className="form-group">
           <input
