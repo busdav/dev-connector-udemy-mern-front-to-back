@@ -1,7 +1,11 @@
 import React, { Fragment, useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { setAlert } from '../../actions/alert';
+import PropTypes from 'prop-types';
 
-export const Register = () => {
+// We could destructure `(props)` to `({ setAlert })`, so that we don't need to use `props.setAlert` but can just say `setAlert`
+export const Register = props => {
   const [formData, setFormData] = useState({
     // using the useState hook (replacing classes); first element is the state object
     name: '',
@@ -18,7 +22,7 @@ export const Register = () => {
   const onSubmit = async e => {
     e.preventDefault();
     if (password !== password2) {
-      console.log('passwords do not match');
+      props.setAlert('Passwords do not match', 'danger');
     } else {
       console.log('Success');
     }
@@ -85,4 +89,12 @@ export const Register = () => {
   );
 };
 
-export default Register;
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired
+};
+
+/* `connect` takes in two arguments, the first one is any state you want to map (e.g. if you want to get state from another component - here null because there's nothing we want to use), and
+the second one is an obect with any actions you want to use. This will allow us to access `props.setAlert`, thereby calling the setAlert action:
+e.g. props.setAlert('Passwords do not match', 'danger') (where first argument is msg, second is alertType)
+*/
+export default connect(null, { setAlert })(Register);
