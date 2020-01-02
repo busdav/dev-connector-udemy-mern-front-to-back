@@ -2,9 +2,10 @@ import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
-// We could destructure `(props)` to `({ setAlert })`, so that we don't need to use `props.setAlert` but can just say `setAlert`
+// We could destructure `(props)` to `({ setAlert, register })`, so that we don't need to use `props.setAlert` but can just say `setAlert`
 export const Register = props => {
   const [formData, setFormData] = useState({
     // using the useState hook (replacing classes); first element is the state object
@@ -24,7 +25,7 @@ export const Register = props => {
     if (password !== password2) {
       props.setAlert('Passwords do not match', 'danger');
     } else {
-      console.log('Success');
+      props.register({ name, email, password });
     }
   };
 
@@ -42,7 +43,7 @@ export const Register = props => {
             name="name"
             value={name}
             onChange={e => onChange(e)}
-            required
+            // required // / You can combine these HTML5 validations with the validations coming from the backend and being displayed by React
           />
           {/* could also call setState directly, but we want to reuse for different situations. Btw for jsx comments we need the curly brace. */}
         </div>
@@ -53,7 +54,7 @@ export const Register = props => {
             name="email"
             value={email}
             onChange={e => onChange(e)}
-            required
+            // required
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -67,7 +68,7 @@ export const Register = props => {
             name="password"
             value={password}
             onChange={e => onChange(e)}
-            minLength="6"
+            // minLength="6"
           />
         </div>
         <div className="form-group">
@@ -77,7 +78,7 @@ export const Register = props => {
             name="password2"
             value={password2}
             onChange={e => onChange(e)}
-            minLength="6"
+            // minLength="6"
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
@@ -90,11 +91,12 @@ export const Register = props => {
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired
 };
 
 /* `connect` takes in two arguments, the first one is any state you want to map (e.g. if you want to get state from another component - here null because there's nothing we want to use), and
-the second one is an obect with any actions you want to use. This will allow us to access `props.setAlert`, thereby calling the setAlert action:
+the second one is an object with any actions you want to use. This will allow us to access `props.setAlert`, thereby calling the setAlert action:
 e.g. props.setAlert('Passwords do not match', 'danger') (where first argument is msg, second is alertType)
 */
-export default connect(null, { setAlert })(Register);
+export default connect(null, { setAlert, register })(Register);

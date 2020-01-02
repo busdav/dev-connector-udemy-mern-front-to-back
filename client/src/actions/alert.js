@@ -6,6 +6,7 @@ We want to be able to dispatch more than one action type from the funtion below 
 which allows us to state `=> dispatch => {}`
 */
 export const setAlert = (msg, alertType, timeout = 5000) => dispatch => {
+  // timeout specified like this sets a default value of 5000
   const id = uuid.v4();
   dispatch({
     type: SET_ALERT,
