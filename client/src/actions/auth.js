@@ -10,6 +10,7 @@ import setAuthToken from '../utils/setAuthToken';
 
 // Load User
 export const loadUser = () => async dispatch => {
+  // Here we first add the token (if there is one stored in localStorage) to each axios.get request
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }

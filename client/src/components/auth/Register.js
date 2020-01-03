@@ -6,7 +6,7 @@ import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
 // We could destructure `(props)` to `({ setAlert, register })`, so that we don't need to use `props.setAlert` but can just say `setAlert`
-export const Register = props => {
+const Register = props => {
   const [formData, setFormData] = useState({
     // using the useState hook (replacing classes); first element is the state object
     name: '',

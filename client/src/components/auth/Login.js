@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export const Login = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     // using the useState hook (replacing classes); first element is the state object
     email: '',

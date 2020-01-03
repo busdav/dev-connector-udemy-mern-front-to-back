@@ -6,9 +6,10 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  token: localStorage.getItem('token'), // We can access localStorage via vanilla JS like so
+  // We can access localStorage via vanilla JS like so
+  token: localStorage.getItem('token'),
   isAuthenticated: null,
-  loading: true, // Once loaded: false
+  loading: true, // Once loaded, through `loadUser` action, called from App.js (we need to do that each time App loads, as JWT is stateless): false
   user: null
 };
 
@@ -17,6 +18,7 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case USER_LOADED:
+      // We now need to pass down state. Note that `state` itself is immutable, so, whatever state is already there, we just want to copy -> spread operator `...state`, and then MODIFY what we want to modify
       return {
         ...state,
         isAuthenticated: true,
