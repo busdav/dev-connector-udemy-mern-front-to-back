@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
@@ -28,6 +28,11 @@ const Register = props => {
       props.register({ name, email, password });
     }
   };
+
+  // Redirect if logged in
+  if (props.isAuthenticated) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <Fragment>
@@ -91,12 +96,19 @@ const Register = props => {
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired, // just type ptfr for snippet
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
-/* `connect` takes in two arguments, the first one is any state you want to map (e.g. if you want to get state from another component - here null because there's nothing we want to use), and
-the second one is an object with any actions you want to use. This will allow us to access `props.setAlert`, thereby calling the setAlert action:
-e.g. props.setAlert('Passwords do not match', 'danger') (where first argument is msg, second is alertType)
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+/* `connect` connects the react component to redux. It takes in two arguments:
+the first one is any state you want to map (e.g. if you want to get state from another component - or null if there's nothing we want to use).
+The second one is an object with any actions you want to use, as defined in the PropTypes of the component. 
+These actions are now props of the component, and we can access and call them e.g. like so:
+props.setAlert('Passwords do not match', 'danger') (where first argument is msg, second is alertType)
 */
-export default connect(null, { setAlert, register })(Register);
+export default connect(mapStateToProps, { setAlert, register })(Register);
