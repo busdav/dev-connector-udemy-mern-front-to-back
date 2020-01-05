@@ -48,9 +48,9 @@ const Register = props => {
             name="name"
             value={name}
             onChange={e => onChange(e)}
-            // required // / You can combine these HTML5 validations with the validations coming from the backend and being displayed by React
+            // required // You can combine these HTML5 validations with the validations coming from the backend and being displayed by React
           />
-          {/* could also call setState directly, but we want to reuse for different situations. Btw for jsx comments we need the curly brace. */}
+          {/* could also call setState directly, but we want to reuse for different situations. Btw for jsx comments we need the curly braces. */}
         </div>
         <div className="form-group">
           <input
@@ -73,7 +73,7 @@ const Register = props => {
             name="password"
             value={password}
             onChange={e => onChange(e)}
-            // minLength="6"
+            // minLength='6'
           />
         </div>
         <div className="form-group">
@@ -83,7 +83,7 @@ const Register = props => {
             name="password2"
             value={password2}
             onChange={e => onChange(e)}
-            // minLength="6"
+            // minLength='6'
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
@@ -108,7 +108,7 @@ const mapStateToProps = state => ({
 /* `connect` connects the react component to redux. It takes in two arguments:
 the first one is any state you want to map (e.g. if you want to get state from another component - or null if there's nothing we want to use).
 The second one is an object with any actions you want to use, as defined in the PropTypes of the component. 
-These actions are now props of the component, and we can access and call them e.g. like so:
-props.setAlert('Passwords do not match', 'danger') (where first argument is msg, second is alertType)
+Following definition in propTypes and passing to `connect`, these actions are now props of the component and connected to redux, 
+and we can access and call them e.g. like so: props.setAlert('Passwords do not match', 'danger') (where first argument is msg, second is alertType)
 */
 export default connect(mapStateToProps, { setAlert, register })(Register);

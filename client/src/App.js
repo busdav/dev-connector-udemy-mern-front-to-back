@@ -31,11 +31,13 @@ const App = () => {
 
   return (
     <Provider store={store}>
+      {/* This is to connect the redux store */}
       <BrowserRouter>
         <Fragment>
           <Navbar />
           <Route exact path="/" component={Landing} />
           <section className="container">
+            {/* `container` centers everything (we  don't want it for the landing page with the image) */}
             <Alert />
             <Switch>
               <Route exact path="/register" component={Register} />
@@ -47,7 +49,5 @@ const App = () => {
     </Provider>
   );
 };
-
-// `container` above because that one centers everything (we only don't want it for the landing page with the image)
 
 export default App;
