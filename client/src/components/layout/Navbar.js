@@ -9,10 +9,16 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
   const authLinks = (
     <ul>
       <li>
+        <Link to="/dashboard">
+          <i className="fas fa-user"></i>{' '}
+          <span className="hide-sm">Dashboard</span>
+          {/* 'hide-sm' hides the text on small screens and only leaves the icon. Also, the empty space object leaves some space. */}
+        </Link>
+      </li>
+      <li>
         <a onClick={logout} href="#!">
           <i className="fas fa-sign-out-alt"></i>{' '}
           <span className="hide-sm">Logout</span>
-          {/* 'hide-sm' hides the text on small screens and only leaves the icon. Also, the empty space object leaves some space. */}
         </a>
       </li>
     </ul>
