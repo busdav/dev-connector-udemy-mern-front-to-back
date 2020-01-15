@@ -19,3 +19,46 @@ export const getCurrentProfile = () => async dispatch => {
     });
   }
 };
+
+// Create or update profile
+/* We want to be redirected after creation of profile. Here, in a redux action, we can't use `Redirect` as in a react component. 
+What we're doing is, we're passing the `history` object that has a method called `push` that will redirect us to a client-side route after form submitted.
+The `edit` parameter is to indicate whether we're updating or creating. We could also create stand-alone update function, but it's very similar, so this might be easier.
+*/
+export const createProfile = (
+  formData,
+  history,
+  edit = false
+) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+
+    const res = await axios.post('/api/profile', formData, config);
+
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+
+    dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
+
+    if (!edit) {
+      history.push('/dashboard');
+    }
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
