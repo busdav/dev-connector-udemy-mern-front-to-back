@@ -35,6 +35,7 @@ export const loadUser = () => async dispatch => {
 
 // Register User
 export const register = ({ name, email, password }) => async dispatch => {
+  // since we're sending data with the axios request, we want to create (i) a config object that has a headers object, and (ii) a body
   const config = {
     headers: {
       'Content-Type': 'application/json'
@@ -44,6 +45,7 @@ export const register = ({ name, email, password }) => async dispatch => {
   const body = JSON.stringify({ name, email, password });
 
   try {
+    // axios returns a promise -> use await. Because we have the proxy, we can just say 'api/users'
     const res = await axios.post('/api/users', body, config);
 
     dispatch({

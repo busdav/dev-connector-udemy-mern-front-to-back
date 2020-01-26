@@ -46,7 +46,7 @@ const EditProfile = ({
       youtube: loading || !profile.social ? '' : profile.social.youtube,
       instagram: loading || !profile.social ? '' : profile.social.instagram
     });
-  }, [loading]); // We want this to run when it's loading, so that's the prop we want the running of `useEffect` to depend on
+  }, [loading, getCurrentProfile]); // We want this to run when it's loading, so that's the prop we want the running of `useEffect` to depend on
 
   const {
     company,

@@ -16,7 +16,7 @@ const Dashboard = ({
 }) => {
   useEffect(() => {
     getCurrentProfile();
-  }, []);
+  }, [getCurrentProfile]);
 
   // We add spinner below, because we don't want to load the jsx of the component before we get the `profile` data from the backend server
   return loading && profile === null ? (
