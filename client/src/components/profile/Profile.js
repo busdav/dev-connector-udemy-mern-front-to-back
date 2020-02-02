@@ -56,7 +56,7 @@ const Profile = ({
               )}
             </div>
             <div className="profile-edu bg-white p-2">
-              <h2 className="text-primary">Education</h2>
+              <h2 className="text-primary">Education </h2>
               {profile.education.length > 0 ? (
                 <Fragment>
                   {profile.education.map(education => (
