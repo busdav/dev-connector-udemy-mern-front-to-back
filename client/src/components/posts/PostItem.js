@@ -14,10 +14,11 @@ const PostItem = ({
 }) => (
   <div className="post bg-white p-1 my-1">
     <div>
-      <a href="profile.html">
+      {/* If want to use template literals, allowing for embedded expressions i.e. string interpolation, you have to wrap the value assigned to `to` in curly braces. */}
+      <Link to={`/profile/${user}`}>
         <img className="round-img" src={avatar} alt="" />
         <h4>{name}</h4>
-      </a>
+      </Link>
     </div>
     <div>
       <p className="my-1">{text}</p>
