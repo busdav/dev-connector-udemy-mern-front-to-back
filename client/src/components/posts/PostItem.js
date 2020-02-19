@@ -1,4 +1,4 @@
-import React, { Framgent } from 'react';
+import React, { Framgent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
@@ -10,7 +10,8 @@ const PostItem = ({
   removeLike,
   deletePost,
   auth,
-  post: { _id, text, name, avatar, user, likes, comments, date }
+  post: { _id, text, name, avatar, user, likes, comments, date },
+  showActions
 }) => (
   <div className="post bg-white p-1 my-1">
     <div>
@@ -25,39 +26,53 @@ const PostItem = ({
       <p className="post-date">
         Posted on <Moment format="YYY/MM/DD">{date}</Moment>
       </p>
-      <button
-        onClick={e => addLike(_id)}
-        type="button"
-        className="btn btn-light"
-      >
-        <i className="fas fa-thumbs-up"></i>{' '}
-        <span> {likes.length > 0 && <span>{likes.length}</span>}</span>
-      </button>
-      <button
-        onClick={e => removeLike(_id)}
-        type="button"
-        className="btn btn-light"
-      >
-        <i className="fas fa-thumbs-down"></i>
-      </button>
-      <Link to={`/post/${_id}`} className="btn btn-primary">
-        Discussion{' '}
-        {comments.length > 0 && (
-          <span className="comment-count">{comments.length}</span>
-        )}
-      </Link>
-      {!auth.loading && user === auth.user._id && (
-        <button
-          onClick={e => deletePost(_id)}
-          type="button"
-          className="btn btn-danger"
-        >
-          <i className="fas fa-times"></i>
-        </button>
+
+      {showActions && (
+        <Fragment>
+          <button
+            onClick={e => addLike(_id)}
+            type="button"
+            className="btn btn-light"
+          >
+            <i className="fas fa-thumbs-up"></i>{' '}
+            <span> {likes.length > 0 && <span>{likes.length}</span>}</span>
+          </button>
+          <button
+            onClick={e => removeLike(_id)}
+            type="button"
+            className="btn btn-light"
+          >
+            <i className="fas fa-thumbs-down"></i>
+          </button>
+          <Link to={`/posts/${_id}`} className="btn btn-primary">
+            Discussion{' '}
+            {comments.length > 0 && (
+              <span className="comment-count">{comments.length}</span>
+            )}
+          </Link>
+          {!auth.loading && user === auth.user._id && (
+            <button
+              onClick={e => deletePost(_id)}
+              type="button"
+              className="btn btn-danger"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          )}
+        </Fragment>
       )}
     </div>
   </div>
 );
+
+PostItem.defaultProps = {
+  /* 
+  We are reusing the PostItem component for the list of post as well as the view of the individual post.
+  However, for the individual post, we don't want to see the post actions. So we add a prop "showActions"
+  and we set it up so that it's true by default (below), and when we don't want it, we pass in false.
+  */
+  showActions: true
+};
 
 PostItem.propTypes = {
   post: PropTypes.object.isRequired,

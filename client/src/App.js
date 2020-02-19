@@ -13,6 +13,7 @@ import AddEducation from './components/profile-forms/AddEducation';
 import Profiles from './components/profiles/Profiles';
 import Profile from './components/profile/Profile';
 import Posts from './components/posts/Posts';
+import Post from './components/post/Post';
 import PrivateRoute from './components/routing/PrivateRoute';
 
 // Redux. The Provider is actually what connects react with redux
@@ -40,14 +41,14 @@ const App = () => {
   }, []);
 
   return (
+    // Next line is to connect the redux store
     <Provider store={store}>
-      {/* This is to connect the redux store */}
       <BrowserRouter>
         <Fragment>
           <Navbar />
           <Route exact path="/" component={Landing} />
+          {/* `container` centers everything (we  don't want it for the landing page with the image) */}
           <section className="container">
-            {/* `container` centers everything (we  don't want it for the landing page with the image) */}
             <Alert />
             <Switch>
               <Route exact path="/register" component={Register} />
@@ -76,6 +77,7 @@ const App = () => {
                 component={AddEducation}
               />
               <PrivateRoute exact path="/posts" component={Posts} />
+              <PrivateRoute exact path="/posts/:id" component={Post} />
             </Switch>
           </section>
         </Fragment>
