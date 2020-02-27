@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import PostItem from '../posts/PostItem';
+import CommentForm from '../post/CommentForm';
 import { getPost } from '../../actions/post';
 import { Link } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
       Essentially we define custom HTML attributes to which we assign our data with JSX syntax (so, don't forget the curly braces).
       */}
       <PostItem post={post} showACtions={false} />
+      <CommentForm postId={post._id} />
     </Fragment>
   );
 };
